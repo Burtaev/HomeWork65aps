@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Application65aps1</string>
+    <string name="app_name">Application65aps</string>
+    <string name="toolbar_title_contact_list">Контакты</string>
+    <string name="toolbar_title_contact_details">Детали контакта</string>
 </resources>
