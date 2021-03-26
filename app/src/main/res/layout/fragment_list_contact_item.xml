@@ -5,6 +5,7 @@
     android:id="@+id/contactListItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/contact_photo"
         android:layout_width="90dp"
@@ -12,6 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/default_user_icon" />
+
     <TextView
         android:id="@+id/contact_name"
         android:layout_width="0dp"
@@ -25,6 +27,7 @@
         app:layout_constraintStart_toEndOf="@+id/contact_photo"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
+
     <TextView
         android:id="@+id/contact_phone"
         android:layout_width="0dp"

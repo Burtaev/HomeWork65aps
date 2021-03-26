@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     tools:context=".ContactListFragment">
+
     <include
         layout="@layout/fragment_list_contact_item"
         android:layout_width="match_parent"
