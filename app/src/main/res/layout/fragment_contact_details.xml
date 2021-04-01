@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:layout_margin="6dp"
     tools:context=".ContactDetailsFragment">
+
     <ImageView
         android:id="@+id/ivContactPhoto"
         android:layout_width="90dp"
@@ -14,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/default_user_icon" />
+
     <TextView
         android:id="@+id/tvContactName"
         android:layout_width="0dp"
@@ -21,12 +23,13 @@
         android:layout_margin="10dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
-        android:maxLines="2"
+        android:maxLines="1"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivContactPhoto"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
+
     <TextView
         android:id="@+id/tvContactPhone"
         android:layout_width="0dp"
@@ -39,6 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivContactPhoto"
         tools:text="@tools:sample/us_phones" />
+
     <TextView
         android:id="@+id/tvContactPhone2"
         android:layout_width="0dp"
@@ -50,6 +54,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvContactPhone"
         tools:text="@tools:sample/us_phones" />
+
     <TextView
         android:id="@+id/tvContactEmail"
         android:layout_width="0dp"
@@ -62,6 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvContactPhone2"
         tools:text="@tools:sample/lorem" />
+
     <TextView
         android:id="@+id/tvContactEmail2"
         android:layout_width="0dp"
@@ -71,6 +77,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvContactEmail"
         tools:text="@tools:sample/lorem" />
+
     <TextView
         android:id="@+id/tvContactDescription"
         android:layout_width="0dp"
