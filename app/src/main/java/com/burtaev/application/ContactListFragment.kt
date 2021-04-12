@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-
 class ContactListFragment : Fragment(R.layout.fragment_contact_list) {
     private var scope: CoroutineScope? = null
 
@@ -32,7 +31,6 @@ class ContactListFragment : Fragment(R.layout.fragment_contact_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = getString(R.string.toolbar_title_contact_list)
-
         scope?.launch {
             val dataFetchService = requireActivity() as? ContactsDataFetchService ?: return@launch
             while (!dataFetchService.isServiceBound()) {
@@ -49,12 +47,14 @@ class ContactListFragment : Fragment(R.layout.fragment_contact_list) {
         }
     }
 
-    private fun updateFields(contact: Contact?) {
-        val ivPhoto = view?.findViewById<ImageView>(R.id.contact_photo)
-        val tvName = view?.findViewById<TextView>(R.id.contact_name)
-        val tvPhone = view?.findViewById<TextView>(R.id.contact_phone)
-        ivPhoto?.setImageResource(contact?.img ?: 0)
-        tvName?.text = contact?.name
-        tvPhone?.text = contact?.phoneNum
+    private fun updateFields(contact: Contact) {
+        val ivPhoto = view?.findViewById<ImageView>(R.id.contact_photo) ?: return
+        val tvName = view?.findViewById<TextView>(R.id.contact_name) ?: return
+        val tvPhone = view?.findViewById<TextView>(R.id.contact_phone) ?: return
+        with(contact) {
+            ivPhoto.setImageResource(img)
+            tvName.text = name
+            tvPhone.text = phoneNum
+        }
     }
 }

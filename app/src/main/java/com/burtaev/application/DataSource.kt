@@ -1,5 +1,7 @@
 package com.burtaev.application
 
+import java.util.GregorianCalendar
+
 class DataSource : ContactsDataSource {
     private val contactModels = listOf(
         Contact(
@@ -10,10 +12,12 @@ class DataSource : ContactsDataSource {
             "example@ex.ru",
             "example2@ex.ru",
             "Шиномонтаж",
-            R.drawable.default_user_icon
+            R.drawable.default_user_icon,
+            GregorianCalendar(2020, 1, 29)
         )
     )
 
     override fun getAllContact() = contactModels
-    override fun getContactById(id: Long) = contactModels.find { it.id == id }
+
+    override fun getContactById(id: Int) = contactModels.find { it.id == id }
 }

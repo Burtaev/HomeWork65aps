@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Application65aps1">
+        <receiver android:name=".BirthdayReminderReceiver">
+            <intent-filter>
+                <action android:name="com.burtaev.BIRTHDAY_RECEIVER" />
+            </intent-filter>
+        </receiver>
         <service android:name=".DataFetchService" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
