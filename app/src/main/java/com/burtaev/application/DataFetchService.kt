@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import kotlinx.coroutines.*
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
 
 class DataFetchService : Service() {
@@ -23,7 +23,7 @@ class DataFetchService : Service() {
         return@withContext contactsDataSource.getAllContact()
     }
 
-    suspend fun fetchContactDetailsById(id: Long): Contact? = withContext(
+    suspend fun fetchContactDetailsById(id: Int): Contact? = withContext(
         coroutineContext
     ) {
         return@withContext contactsDataSource.getContactById(id)

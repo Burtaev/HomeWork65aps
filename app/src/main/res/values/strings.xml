@@ -2,4 +2,11 @@
     <string name="app_name">Application65aps</string>
     <string name="toolbar_title_contact_list">Контакты</string>
     <string name="toolbar_title_contact_details">Детали контакта</string>
+    <string name="switch_text_reminder">Напомнить о дне рождения</string>
+    <string name="toast_reminder_on">Напоминание включено</string>
+    <string name="toast_reminder_off">Напоминание выключено</string>
+    <string name="text_birthday">День рождения</string>
+    <string name="text_remind_birthday">Сегодня день рождения у %s</string>
+    <string name="notification_channel_name">Напоминания о днях рождения</string>
+    <string name="notification_channel_desc">События контактов которые выбраны для отслеживания</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.burtaev.application
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +18,7 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        createNotificationChannel()
         if (savedInstanceState == null) {
             showContactListFragment()
         }
@@ -32,6 +36,11 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
             val binder = service as DataFetchService.MyLocalBinder
             myService = binder.getService()
             isBound = true
+            val id = intent.getIntExtra(KEY_PERSON_ID, -1)
+            if (id > 0)
+                showContactDetailsFragment(id)
+            else
+                showContactListFragment()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -52,7 +61,7 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
             .commit()
     }
 
-    override fun showContactDetailsFragment(contactID: Long) {
+    override fun showContactDetailsFragment(contactID: Int) {
         val fragment = ContactDetailsFragment.newInstance(contactID)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -64,5 +73,19 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
 
     override suspend fun getContactsList() = myService?.fetchContact()
 
-    override suspend fun getContactDetails(id: Long) = myService?.fetchContactDetailsById(id)
+    override suspend fun getContactDetails(id: Int) = myService?.fetchContactDetailsById(id)
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT < 26) {
+            return
+        }
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            BIRTHDAY_CHANNEL_ID,
+            getString(R.string.notification_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = getString(R.string.notification_channel_desc)
+        notificationManager.createNotificationChannel(channel)
+    }
 }
