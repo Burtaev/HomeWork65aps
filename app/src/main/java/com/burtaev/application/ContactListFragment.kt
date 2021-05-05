@@ -52,7 +52,10 @@ class ContactListFragment : Fragment(R.layout.fragment_contact_list) {
         val tvName = view?.findViewById<TextView>(R.id.contact_name) ?: return
         val tvPhone = view?.findViewById<TextView>(R.id.contact_phone) ?: return
         with(contact) {
-            ivPhoto.setImageResource(img)
+            when (img != null) {
+                true -> ivPhoto.setImageURI(img)
+                false -> ivPhoto.setImageResource(R.drawable.default_user_icon)
+            }
             tvName.text = name
             tvPhone.text = phoneNum
         }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_primary">#2566d3</color>
     <color name="color_accent">#3e57e0</color>
+    <color name="background_permission_fragment">#4a4a4a</color>
 </resources>

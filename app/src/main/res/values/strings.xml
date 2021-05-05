@@ -9,4 +9,11 @@
     <string name="text_remind_birthday">Сегодня день рождения у %s</string>
     <string name="notification_channel_name">Напоминания о днях рождения</string>
     <string name="notification_channel_desc">События контактов которые выбраны для отслеживания</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_permission">Чтобы увидеть список Ваших контактов, разрешите приложению получить доступ</string>
+    <string name="permission_button_text">Получить доступ</string>
+    <string name="unknown_name">Неизвестное имя</string>
+    <string name="unknown_phone">Неизвестный номер</string>
+    <string name="toast_permission_text">Предоставьте доступ к контактам в настройках приложения</string>
 </resources>
