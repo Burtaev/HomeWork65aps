@@ -1,5 +1,6 @@
 package com.burtaev.application
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -23,7 +24,7 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
     private var scope: CoroutineScope? = null
 
     companion object {
-        fun newInstance(contactId: Int) = ContactDetailsFragment().apply {
+        fun newInstance(contactId: String) = ContactDetailsFragment().apply {
             arguments = bundleOf(ARG_PARAM_CONTACT_ID to contactId)
         }
     }
@@ -40,8 +41,8 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().title = getString(R.string.toolbar_title_contact_details)
-        val contactId = arguments?.getInt(ARG_PARAM_CONTACT_ID, 0) ?: 0
+        activity?.title = getString(R.string.toolbar_title_contact_details)
+        val contactId = arguments?.getString(ARG_PARAM_CONTACT_ID) ?: ""
         scope?.launch {
             val dataFetchService = requireActivity() as? ContactsDataFetchService ?: return@launch
             while (!dataFetchService.isServiceBound()) {
@@ -54,6 +55,7 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         }
     }
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private fun updateReminder(contact: Contact) {
         val switchBirthdayReminder = view?.findViewById<Switch>(R.id.swBirthdayReminder) ?: return
         with(switchBirthdayReminder) {
@@ -82,7 +84,10 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         val tvDescription = view?.findViewById<TextView>(R.id.tvContactDescription) ?: return
         val tvBirthday = view?.findViewById<TextView>(R.id.tvContactBirthday) ?: return
         with(contact) {
-            ivPhoto.setImageResource(img)
+            when (img != null) {
+                true -> ivPhoto.setImageURI(img)
+                false -> ivPhoto.setImageResource(R.drawable.default_user_icon)
+            }
             tvName.text = name
             tvPhone.text = phoneNum
             tvPhone2.text = phoneNum2

@@ -19,10 +19,9 @@ class BirthdayReminderNotification {
                     KEY_TEXT,
                     String.format(context.getString(R.string.text_remind_birthday), contact.name)
                 )
-
             val alarmIntent = PendingIntent.getBroadcast(
                 context,
-                contact.id,
+                contact.id.hashCode(),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -31,7 +30,7 @@ class BirthdayReminderNotification {
         } else {
             val alarmIntent = PendingIntent.getBroadcast(
                 context,
-                contact.id,
+                contact.id.hashCode(),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -41,7 +40,7 @@ class BirthdayReminderNotification {
     }
 
     fun checkBirthdayReminder(context: Context, contact: Contact) = PendingIntent.getBroadcast(
-        context, contact.id,
+        context, contact.id.hashCode(),
         Intent(context, BirthdayReminderReceiver::class.java),
         PendingIntent.FLAG_NO_CREATE
     ) != null
