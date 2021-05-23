@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="6dp"
-    tools:context=".ContactDetailsFragment">
+    tools:context=".view.ContactDetailsFragment">
 
     <ImageView
         android:id="@+id/ivContactPhoto"

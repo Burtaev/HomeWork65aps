@@ -1,35 +1,35 @@
-package com.burtaev.application
+package com.burtaev.application.repository
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.ContactsContract
+import com.burtaev.application.R
+import com.burtaev.application.model.Contact
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class DataSource() {
-    private lateinit var context: Context;
-    private lateinit var contentResolver: ContentResolver;
+class DataSource(private val context: Context) : ContactRepository {
 
-    fun getAllContact(context: Context): List<Contact> {
-        contentResolver = context.contentResolver
-        this.context = context;
+    private val contentResolver: ContentResolver = context.contentResolver
+
+    override fun getContactsList(): List<Contact> {
         val contactModels = mutableListOf<Contact>()
         val cursor = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             null,
             null,
             null,
-            null
-        )
+            null)
         try {
             cursor?.let { it ->
                 while (it.moveToNext()) {
                     val idContact =
                         it.getString(it.getColumnIndex(ContactsContract.Contacts._ID))
-                    getContactById(idContact)?.let {
+                    getContactDetails(idContact)?.let {
                         contactModels.add(it)
                     }
                 }
@@ -41,7 +41,7 @@ class DataSource() {
         }
     }
 
-    fun getContactById(id: String): Contact? {
+    override fun getContactDetails(id: String): Contact? {
         val cursor = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             null,
@@ -121,6 +121,7 @@ class DataSource() {
         }
     }
 
+    @SuppressLint("Recycle")
     private fun getCursor(contactID: String, mime: String): Cursor? {
         return try {
             contentResolver.query(

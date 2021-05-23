@@ -1,36 +1,31 @@
-package com.burtaev.application
+package com.burtaev.application.activity
 
 import android.Manifest.permission.READ_CONTACTS
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.M
 import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
-import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.burtaev.application.BIRTHDAY_CHANNEL_ID
+import com.burtaev.application.view.ContactListFragment
+import com.burtaev.application.KEY_PERSON_ID
+import com.burtaev.application.OnContactClickedListener
+import com.burtaev.application.R
+import com.burtaev.application.view.CONTACTS_PERMISSION_REQUEST
+import com.burtaev.application.view.ContactDetailsFragment
+import com.burtaev.application.view.ContactsPermissionFragment
 
-class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsDataFetchService {
-
-    private var myService: DataFetchService? = null
-    private var isBound = false
-
+class MainActivity : AppCompatActivity(), OnContactClickedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         createNotificationChannel()
         if (savedInstanceState == null) {
             if (checkPermission(READ_CONTACTS)) showFragment() else showContactPermissionFragment()
-        }
-        if (!isBound) {
-            val intent = Intent(this, DataFetchService::class.java)
-            bindService(intent, myConnection, Context.BIND_AUTO_CREATE)
         }
     }
 
@@ -40,33 +35,12 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
             showContactPermissionFragment()
     }
 
-    private val myConnection = object : ServiceConnection {
-        override fun onServiceConnected(
-            className: ComponentName,
-            service: IBinder
-        ) {
-            val binder = service as DataFetchService.MyLocalBinder
-            myService = binder.getService()
-            isBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            isBound = false
-        }
-    }
-
-    override fun onDestroy() {
-        if (isBound)
-            unbindService(myConnection)
-        super.onDestroy()
-    }
-
     private fun showFragment() {
         val id = intent.getStringExtra(KEY_PERSON_ID) ?: ""
-        if (id != "")
-            showContactDetailsFragment(id)
-        else
-            showContactListFragment()
+        when (id == "") {
+            true -> showContactListFragment()
+            false -> showContactDetailsFragment(id)
+        }
     }
 
     private fun showContactListFragment() {
@@ -93,12 +67,6 @@ class MainActivity : AppCompatActivity(), OnContactClickedListener, ContactsData
         } else
             showContactListFragment()
     }
-
-    override fun isServiceBound() = isBound
-
-    override suspend fun getContactsList() = myService?.fetchContact()
-
-    override suspend fun getContactDetails(id: String) = myService?.fetchContactDetailsById(id)
 
     private fun createNotificationChannel() {
         if (SDK_INT < O) {
