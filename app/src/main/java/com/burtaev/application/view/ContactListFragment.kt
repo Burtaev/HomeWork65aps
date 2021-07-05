@@ -1,50 +1,41 @@
-package com.burtaev.application
+package com.burtaev.application.view
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.burtaev.application.OnContactClickedListener
+import com.burtaev.application.R
+import com.burtaev.application.model.Contact
+import com.burtaev.application.viewModels.ContactListViewModel
 
 class ContactListFragment : Fragment(R.layout.fragment_contact_list) {
-    private var scope: CoroutineScope? = null
+    private var contactListViewModel: ContactListViewModel? = null
 
     companion object {
         fun newInstance() = ContactListFragment()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        scope = CoroutineScope(Dispatchers.IO)
-    }
-
-    override fun onDetach() {
-        scope?.cancel()
-        super.onDetach()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        contactListViewModel = ViewModelProvider(this).get(ContactListViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = getString(R.string.toolbar_title_contact_list)
-        scope?.launch {
-            val dataFetchService = requireActivity() as? ContactsDataFetchService ?: return@launch
-            while (!dataFetchService.isServiceBound()) {
-            }
-            val contact = dataFetchService.getContactsList()?.firstOrNull() ?: return@launch
-            requireActivity().runOnUiThread {
-                updateFields(contact)
+        contactListViewModel?.getContactList()
+            ?.observe(viewLifecycleOwner, Observer { contactList ->
+                updateFields(contactList[0])
                 view.setOnClickListener {
                     (requireActivity() as? OnContactClickedListener)?.showContactDetailsFragment(
-                        contact.id
+                        contactList[0].id
                     )
                 }
-            }
-        }
+            })
     }
 
     private fun updateFields(contact: Contact) {

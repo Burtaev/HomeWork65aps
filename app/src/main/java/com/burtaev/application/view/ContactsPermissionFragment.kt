@@ -1,7 +1,6 @@
-package com.burtaev.application
+package com.burtaev.application.view
 
 import android.Manifest.permission.READ_CONTACTS
-import android.app.ActionBar
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -12,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.burtaev.application.R
 
 const val CONTACTS_PERMISSION_REQUEST = 200;
 

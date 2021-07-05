@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.burtaev.application.activity.MainActivity
 import java.util.Calendar.getInstance
 
 const val KEY_PERSON_ID = "KEY_PERSON_ID"

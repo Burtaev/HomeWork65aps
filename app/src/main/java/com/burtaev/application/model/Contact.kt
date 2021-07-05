@@ -1,4 +1,4 @@
-package com.burtaev.application
+package com.burtaev.application.model
 
 import android.net.Uri
 import java.util.Calendar

@@ -1,7 +1,6 @@
-package com.burtaev.application
+package com.burtaev.application.view
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -11,17 +10,19 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.burtaev.application.BirthdayReminderNotification
+import com.burtaev.application.R
+import com.burtaev.application.model.Contact
+import com.burtaev.application.viewModels.ContactDetailsViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 private const val ARG_PARAM_CONTACT_ID = "contactId"
 
 class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
-    private var scope: CoroutineScope? = null
+    private var contactDetailsViewModel: ContactDetailsViewModel? = null
 
     companion object {
         fun newInstance(contactId: String) = ContactDetailsFragment().apply {
@@ -29,29 +30,22 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        scope = CoroutineScope(Dispatchers.IO)
-    }
-
-    override fun onDetach() {
-        scope?.cancel()
-        super.onDetach()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        contactDetailsViewModel =
+            ViewModelProvider(this).get(ContactDetailsViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = getString(R.string.toolbar_title_contact_details)
         val contactId = arguments?.getString(ARG_PARAM_CONTACT_ID) ?: ""
-        scope?.launch {
-            val dataFetchService = requireActivity() as? ContactsDataFetchService ?: return@launch
-            while (!dataFetchService.isServiceBound()) {
-            }
-            val contact = dataFetchService.getContactDetails(contactId) ?: return@launch
-            requireActivity().runOnUiThread {
+        contactDetailsViewModel?.let {
+            it.loadContactDetailsById(contactId)
+            it.getContact().observe(viewLifecycleOwner, Observer { contact ->
                 updateFields(contact)
                 updateReminder(contact)
-            }
+            })
         }
     }
 
