@@ -2,18 +2,19 @@ package com.burtaev.application.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
+import android.view.ViewGroup
 import android.widget.Switch
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.burtaev.application.BirthdayReminderNotification
 import com.burtaev.application.R
+import com.burtaev.application.databinding.FragmentContactDetailsBinding
 import com.burtaev.application.model.Contact
 import com.burtaev.application.viewModels.ContactDetailsViewModel
 import java.text.SimpleDateFormat
@@ -21,8 +22,11 @@ import java.util.Locale
 
 private const val ARG_PARAM_CONTACT_ID = "contactId"
 
-class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
-    private var contactDetailsViewModel: ContactDetailsViewModel? = null
+class ContactDetailsFragment :
+    Fragment(R.layout.fragment_contact_details) {
+    private val contactDetailsViewModel by viewModels<ContactDetailsViewModel>()
+    private var _binding: FragmentContactDetailsBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         fun newInstance(contactId: String) = ContactDetailsFragment().apply {
@@ -30,17 +34,25 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        contactDetailsViewModel =
-            ViewModelProvider(this).get(ContactDetailsViewModel::class.java)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        activity?.title = getString(R.string.toolbar_title_contact_details)
+        _binding = FragmentContactDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.toolbar_title_contact_details)
         val contactId = arguments?.getString(ARG_PARAM_CONTACT_ID) ?: ""
-        contactDetailsViewModel?.let {
+        contactDetailsViewModel.let {
             it.loadContactDetailsById(contactId)
             it.getContact().observe(viewLifecycleOwner, Observer { contact ->
                 updateFields(contact)
@@ -69,28 +81,18 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details) {
     }
 
     private fun updateFields(contact: Contact) {
-        val ivPhoto = view?.findViewById<ImageView>(R.id.ivContactPhoto) ?: return
-        val tvName = view?.findViewById<TextView>(R.id.tvContactName) ?: return
-        val tvPhone = view?.findViewById<TextView>(R.id.tvContactPhone) ?: return
-        val tvPhone2 = view?.findViewById<TextView>(R.id.tvContactPhone2) ?: return
-        val tvEmail = view?.findViewById<TextView>(R.id.tvContactEmail) ?: return
-        val tvEmail2 = view?.findViewById<TextView>(R.id.tvContactEmail2) ?: return
-        val tvDescription = view?.findViewById<TextView>(R.id.tvContactDescription) ?: return
-        val tvBirthday = view?.findViewById<TextView>(R.id.tvContactBirthday) ?: return
-        with(contact) {
-            when (img != null) {
-                true -> ivPhoto.setImageURI(img)
-                false -> ivPhoto.setImageResource(R.drawable.default_user_icon)
-            }
-            tvName.text = name
-            tvPhone.text = phoneNum
-            tvPhone2.text = phoneNum2
-            tvEmail.text = email
-            tvEmail2.text = email2
-            tvDescription.text = description
-            if (dateBirthday != null) {
-                tvBirthday.text =
-                    SimpleDateFormat("d MMMM", Locale.getDefault()).format(dateBirthday.time)
+        with(binding) {
+            ivContactPhoto.setImageURI(contact.img)
+            tvContactName.text = contact.name
+            tvContactPhone.text = contact.phoneNum
+            tvContactPhone2.text = contact.phoneNum2
+            tvContactEmail.text = contact.email
+            tvContactEmail2.text = contact.email2
+            tvContactDescription.text = contact.description
+            if (contact.dateBirthday != null) {
+                tvContactBirthday.text =
+                    SimpleDateFormat("d MMMM",
+                        Locale.getDefault()).format(contact.dateBirthday.time)
             }
         }
     }
