@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 
 class ContactDetailsViewModel(application: Application) : AndroidViewModel(application) {
     private val contactRepository: ContactRepository = DataSource(getApplication())
-    private val contact = MutableLiveData<Contact>()
+    private val contactLiveData = MutableLiveData<Contact>()
 
-    fun getContact(): LiveData<Contact> = contact
+    fun getContact(): LiveData<Contact> = contactLiveData
 
     fun loadContactDetailsById(id: String) {
         viewModelScope.launch {
-            contact.postValue(contactRepository.getContactDetails(id))
+            contactLiveData.postValue(contactRepository.getContactDetails(id))
         }
     }
 }

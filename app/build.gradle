@@ -7,13 +7,16 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    buildFeatures {
+         viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.burtaev.application"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,6 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,7 +44,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "org.koin:koin-android-scope:2.1.6"
-    implementation "org.koin:koin-android-viewmodel:2.1.6"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }

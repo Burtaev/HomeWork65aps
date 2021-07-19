@@ -16,4 +16,5 @@
     <string name="unknown_name">Неизвестное имя</string>
     <string name="unknown_phone">Неизвестный номер</string>
     <string name="toast_permission_text">Предоставьте доступ к контактам в настройках приложения</string>
+    <string name="title_search">Поиск</string>
 </resources>

@@ -16,12 +16,17 @@ class DataSource(private val context: Context) : ContactRepository {
 
     private val contentResolver: ContentResolver = context.contentResolver
 
-    override fun getContactsList(): List<Contact> {
+    override fun getContactsList(query: String?): List<Contact> {
         val contactModels = mutableListOf<Contact>()
+        var selectionParamContacts: String? = null
+        if (query != null) {
+            selectionParamContacts =
+                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE \'%" + query + "%\'"
+        }
         val cursor = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             null,
-            null,
+            selectionParamContacts,
             null,
             null)
         try {
